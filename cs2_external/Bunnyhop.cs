@@ -35,27 +35,27 @@ namespace bunnyhop
                 return;
             }
 
-            // idk
-            IntPtr forceJumpAddr = cs2ModuleClient + 0x17BA530;
-            IntPtr playerStateAddr = cs2ModuleClient + 0x17BA530;
+            IntPtr JumpStateAddr = cs2ModuleClient + 0x182FBC0;
+            IntPtr DuckStateAddr = cs2ModuleClient + 0x182FC50;
 
             while (true)
             {
+                uint fFlagJump = Memory.ReadUInt(cs2ProcessHandle, JumpStateAddr);
+
                 if (GetAsyncKeyState(Offsets.SPACE_BAR) < 0)
                 {
-                    uint fFlag = Memory.ReadUInt(cs2ProcessHandle, playerStateAddr);
 
-                    Console.WriteLine($"Player state (fFlag): {fFlag}");
+                    Console.WriteLine($"Player state (fFlag): {fFlagJump}");
 
-                    if (fFlag == Offsets.STANDING || fFlag == Offsets.CROUCHING)
+                    if (fFlagJump == Offsets.NOTINACTION)
                     {
                         Thread.Sleep(1);
-                        Memory.WriteUInt(cs2ProcessHandle, forceJumpAddr, Offsets.PLUS_JUMP);
+                        Memory.WriteUInt(cs2ProcessHandle, JumpStateAddr, Offsets.INACTION);
                         Console.WriteLine("Jump executed.");
                     }
                     else
                     {
-                        Memory.WriteUInt(cs2ProcessHandle, forceJumpAddr, Offsets.MINUS_JUMP);
+                        Memory.WriteUInt(cs2ProcessHandle, JumpStateAddr, Offsets.NOTINACTION);
                         Console.WriteLine("Stop jump.");
                     }
                 }
