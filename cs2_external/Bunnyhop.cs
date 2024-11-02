@@ -36,7 +36,6 @@ namespace bunnyhop
             }
 
             IntPtr JumpStateAddr = cs2ModuleClient + 0x182FBC0;
-            IntPtr DuckStateAddr = cs2ModuleClient + 0x182FC50;
 
             while (true)
             {
